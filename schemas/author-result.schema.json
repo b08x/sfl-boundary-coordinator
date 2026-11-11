@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "required": [
+    "task_id",
+    "document_revision",
+    "repository_revision",
+    "draft",
+    "summary",
+    "changed_paths",
+    "assumptions",
+    "unresolved_claims",
+    "blockers"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "document_revision": {
+      "type": "string"
+    },
+    "repository_revision": {
+      "type": "string"
+    },
+    "draft": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "changed_paths": {
+      "type": "array"
+    },
+    "assumptions": {
+      "type": "array"
+    },
+    "unresolved_claims": {
+      "type": "array"
+    },
+    "blockers": {
+      "type": "array"
+    }
+  }
+}

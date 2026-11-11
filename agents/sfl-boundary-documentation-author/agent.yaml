@@ -1,0 +1,8 @@
+spec_version: 0.1.0
+name: sfl-boundary-documentation-author
+version: 0.4.0
+description: Compose and revise the boundary workflow document; sole file editor,
+  following the evidence packet and SFL genre contract.
+tools: []
+skills:
+- sfl-technical-writing

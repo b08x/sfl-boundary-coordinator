@@ -1,0 +1,6 @@
+spec_version: 0.1.0
+name: sfl-boundary-satirical-reframer
+version: 0.4.0
+description: Expose a verified contradiction through an optional fictional system
+  voice.
+tools: []

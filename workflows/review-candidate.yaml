@@ -1,0 +1,133 @@
+name: review-candidate
+version: 0.4.0
+description: One frozen candidate review cycle; declarative DAG requiring host scheduling
+  and output bindings
+inputs:
+- name: source
+  type: object
+  required: true
+steps:
+- id: freeze
+  action: Compute blind packet; source contains the frozen candidate and complete
+    register
+  tool: prepare-blind
+  inputs:
+    source: ${{ inputs.source }}
+  outputs:
+  - packet
+- id: blind-ideational
+  action: Fresh tool-free session; pass identical inline packet, return one judgment
+  agent: sfl-boundary-docs-ideational-judge
+  depends_on:
+  - freeze
+  inputs:
+    packet: ${{ steps.freeze.outputs.packet }}
+  outputs:
+  - judgment
+- id: blind-interpersonal
+  action: Fresh tool-free session; pass identical inline packet, return one judgment
+  agent: sfl-boundary-docs-interpersonal-judge
+  depends_on:
+  - freeze
+  inputs:
+    packet: ${{ steps.freeze.outputs.packet }}
+  outputs:
+  - judgment
+- id: blind-textual
+  action: Fresh tool-free session; pass identical inline packet, return one judgment
+  agent: sfl-boundary-docs-textual-judge
+  depends_on:
+  - freeze
+  inputs:
+    packet: ${{ steps.freeze.outputs.packet }}
+  outputs:
+  - judgment
+- id: retrieve
+  action: Resolve combined requests from all frozen blind findings; return current
+    evidence packet
+  agent: sfl-boundary-evidence-broker
+  depends_on:
+  - blind-ideational
+  - blind-interpersonal
+  - blind-textual
+  inputs:
+    packet: ${{ steps.freeze.outputs.packet }}
+    judgments:
+    - ${{ steps.blind-ideational.outputs.judgment }}
+    - ${{ steps.blind-interpersonal.outputs.judgment }}
+    - ${{ steps.blind-textual.outputs.judgment }}
+  outputs:
+  - evidence
+- id: cross-packet
+  action: Validate blind roster and evidence bindings; compute shared digest
+  tool: prepare-cross
+  depends_on:
+  - retrieve
+  inputs:
+    blind: ${{ steps.freeze.outputs.packet }}
+    judgments:
+    - ${{ steps.blind-ideational.outputs.judgment }}
+    - ${{ steps.blind-interpersonal.outputs.judgment }}
+    - ${{ steps.blind-textual.outputs.judgment }}
+    evidence: ${{ steps.retrieve.outputs.evidence }}
+  outputs:
+  - packet
+- id: cross-ideational
+  action: Fresh tool-free session with identical cross packet; return one cross judgment
+  agent: sfl-boundary-docs-ideational-judge
+  depends_on:
+  - cross-packet
+  inputs:
+    packet: ${{ steps.cross-packet.outputs.packet }}
+  outputs:
+  - judgment
+- id: cross-interpersonal
+  action: Fresh tool-free session with identical cross packet; return one cross judgment
+  agent: sfl-boundary-docs-interpersonal-judge
+  depends_on:
+  - cross-packet
+  inputs:
+    packet: ${{ steps.cross-packet.outputs.packet }}
+  outputs:
+  - judgment
+- id: cross-textual
+  action: Fresh tool-free session with identical cross packet; return one cross judgment
+  agent: sfl-boundary-docs-textual-judge
+  depends_on:
+  - cross-packet
+  inputs:
+    packet: ${{ steps.cross-packet.outputs.packet }}
+  outputs:
+  - judgment
+- id: gates
+  action: Coordinator records five gates using current identity and findings; this
+    action needs host coordinator binding
+  depends_on:
+  - cross-ideational
+  - cross-interpersonal
+  - cross-textual
+  inputs:
+    packet: ${{ steps.cross-packet.outputs.packet }}
+    judgments:
+    - ${{ steps.cross-ideational.outputs.judgment }}
+    - ${{ steps.cross-interpersonal.outputs.judgment }}
+    - ${{ steps.cross-textual.outputs.judgment }}
+  outputs:
+  - gates
+- id: accept
+  action: Check current packet, judgments and gate state; accepted false means BLOCKED/PARTIAL,
+    never successful approval
+  tool: check-final
+  depends_on:
+  - gates
+  inputs:
+    cross: ${{ steps.cross-packet.outputs.packet }}
+    judgments:
+    - ${{ steps.cross-ideational.outputs.judgment }}
+    - ${{ steps.cross-interpersonal.outputs.judgment }}
+    - ${{ steps.cross-textual.outputs.judgment }}
+    gates: ${{ steps.gates.outputs.gates }}
+  outputs:
+  - result
+error_handling:
+  on_step_failure: abort

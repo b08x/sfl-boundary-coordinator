@@ -1,0 +1,6 @@
+spec_version: 0.1.0
+name: sfl-boundary-modality-calibrator
+version: 0.4.0
+description: Align certainty and obligation with evidence without erasing a useful
+  position.
+tools: []

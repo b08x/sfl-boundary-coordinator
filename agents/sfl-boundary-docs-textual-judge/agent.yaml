@@ -1,0 +1,6 @@
+spec_version: 0.1.0
+name: sfl-boundary-docs-textual-judge
+version: 0.4.0
+description: Independent textual metafunction blind audit and evidence-backed cross-examination;
+  no tools, edits, or delegation.
+tools: []

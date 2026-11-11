@@ -1,0 +1,6 @@
+spec_version: 0.1.0
+name: sfl-boundary-evidence-auditor
+version: 0.4.0
+description: Independently test support, attribution, and counter-evidence for both
+  source and critique.
+tools: []

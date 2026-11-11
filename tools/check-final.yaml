@@ -1,0 +1,31 @@
+name: check-final
+description: 'Revision-bound packet consistency: check-final'
+version: 0.4.0
+input_schema:
+  type: object
+  properties:
+    cross:
+      type: object
+    judgments:
+      type: array
+      items:
+        type: object
+    gates:
+      type: object
+  required:
+  - cross
+  - judgments
+  - gates
+  additionalProperties: false
+output_schema:
+  type: object
+implementation:
+  type: script
+  path: check-final.py
+  runtime: python3
+  timeout: 30
+annotations:
+  read_only: true
+  requires_confirmation: false
+  cost: none
+  idempotent: true

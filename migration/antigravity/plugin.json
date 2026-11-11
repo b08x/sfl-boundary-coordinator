@@ -1,0 +1,11 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "sfl-boundary",
+  "displayName": "SFL Boundary",
+  "version": "0.3.0",
+  "description": "R.U.T.H. evidence-backed sfl-boundary workflow: codebase-memory broker, blind metafunction audits, and revision-bound cross-examination.",
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Examine this claim and its mechanism; audit my critique by the same standard. No satire."
+  ]
+}

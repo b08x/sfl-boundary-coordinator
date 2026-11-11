@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "required": [
+    "task_id",
+    "role",
+    "revision",
+    "status",
+    "verdict",
+    "findings",
+    "evidence",
+    "assumptions",
+    "blockers",
+    "required_actions"
+  ],
+  "properties": {
+    "findings": {
+      "type": "array"
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "assumptions": {
+      "type": "array"
+    },
+    "blockers": {
+      "type": "array"
+    },
+    "required_actions": {
+      "type": "array"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "COMPLETE",
+        "BLOCKED"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "PASS",
+        "REVISE",
+        "BLOCKED",
+        "NOT_APPLICABLE"
+      ]
+    }
+  }
+}

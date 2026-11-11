@@ -1,72 +1,163 @@
-spec_version: "0.1.0"
-name: my-agent
-version: 0.1.0
-description: A production-ready agent with full compliance configuration
-author: ""
-license: proprietary
-model:
-  preferred: claude-opus-4-6
-  fallback:
-    - claude-sonnet-4-5-20250929
-  constraints:
-    temperature: 0.1
-    max_tokens: 8192
-skills: []
-tools: []
+spec_version: 0.1.0
+name: sfl-boundary-coordinator
+version: 0.4.0
+description: R.U.T.H. — Records Uncertainty, Traces History; coordinate sfl-boundary
+  with an evidence broker and three independent metafunction judges.
+skills:
+- examine-with-review
+- sfl-technical-writing
+tools:
+- prepare-blind
+- prepare-cross
+- check-final
 delegation:
-  mode: auto
-runtime:
-  max_turns: 50
-  timeout: 300
+  mode: explicit
+agents:
+  sfl-boundary-claim-examiner:
+    description: Separate the stated claim from the inference the audience is being
+      asked to accept.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned advisor task
+  sfl-boundary-docs-ideational-judge:
+    description: Independent ideational metafunction blind audit and evidence-backed
+      cross-examination; no tools, edits, or delegation.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned checker task
+  sfl-boundary-docs-interpersonal-judge:
+    description: Independent interpersonal metafunction blind audit and evidence-backed
+      cross-examination; no tools, edits, or delegation.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned checker task
+  sfl-boundary-docs-textual-judge:
+    description: Independent textual metafunction blind audit and evidence-backed
+      cross-examination; no tools, edits, or delegation.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned checker task
+  sfl-boundary-documentation-author:
+    description: Compose and revise the boundary workflow document; sole file editor,
+      following the evidence packet and SFL genre contract.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned maker task
+  sfl-boundary-evidence-auditor:
+    description: Independently test support, attribution, and counter-evidence for
+      both source and critique.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned advisor task
+  sfl-boundary-evidence-broker:
+    description: Retrieve revision-bound codebase-memory evidence, coverage and source
+      fallbacks for R.U.T.H.; no drafting or administrative graph mutations.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned retriever task
+  sfl-boundary-mechanism-tracer:
+    description: Trace the operational dependencies and ownership behind an abstraction.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned advisor task
+  sfl-boundary-modality-calibrator:
+    description: Align certainty and obligation with evidence without erasing a useful
+      position.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned advisor task
+  sfl-boundary-relational-editor:
+    description: Keep peer challenge focused on claims and conduct while preserving
+      directness.
+    delegation:
+      mode: explicit
+      triggers:
+      - Coordinator-assigned advisor task
+  sfl-boundary-satirical-reframer:
+    description: Expose a verified contradiction through an optional fictional system
+      voice.
+    delegation:
+      mode: explicit
+      triggers:
+      - Only on explicit user request for satire
 compliance:
   risk_tier: standard
-  frameworks: []
-  supervision:
-    designated_supervisor: null
-    review_cadence: quarterly
-    human_in_the_loop: conditional
-    escalation_triggers:
-      - confidence_below: 0.7
-      - error_detected: true
-    override_capability: true
-    kill_switch: true
-  recordkeeping:
-    audit_logging: true
-    log_format: structured_json
-    retention_period: 6y
-    log_contents:
-      - prompts_and_responses
-      - tool_calls
-      - decision_pathways
-      - model_version
-      - timestamps
-    immutable: true
-  model_risk:
-    inventory_id: null
-    validation_cadence: annual
-    validation_type: full
-    conceptual_soundness: null
-    ongoing_monitoring: true
-    outcomes_analysis: true
-    drift_detection: true
-    parallel_testing: false
-  data_governance:
-    pii_handling: redact
-    data_classification: confidential
-    consent_required: true
-    cross_border: false
-    bias_testing: true
-    lda_search: false
-  communications:
-    type: correspondence
-    pre_review_required: false
-    fair_balanced: true
-    no_misleading: true
-    disclosures_required: false
-  vendor_management:
-    due_diligence_complete: false
-    soc_report_required: false
-    vendor_ai_notification: true
-    subcontractor_assessment: false
-tags: []
-metadata: {}
+  segregation_of_duties:
+    roles:
+    - id: coordinator
+      description: Route, adjudicate and deliver
+      permissions:
+      - report
+    - id: maker
+      description: Compose authorized document candidates
+      permissions:
+      - create
+      - submit
+    - id: checker
+      description: Independent metafunction review
+      permissions:
+      - review
+      - approve
+      - reject
+    - id: retriever
+      description: Retrieve scoped evidence
+      permissions:
+      - report
+    - id: advisor
+      description: Return bounded analytical findings
+      permissions:
+      - report
+    conflicts:
+    - - maker
+      - checker
+    - - coordinator
+      - maker
+    - - coordinator
+      - checker
+    - - retriever
+      - checker
+    assignments:
+      sfl-boundary-claim-examiner:
+      - advisor
+      sfl-boundary-docs-ideational-judge:
+      - checker
+      sfl-boundary-docs-interpersonal-judge:
+      - checker
+      sfl-boundary-docs-textual-judge:
+      - checker
+      sfl-boundary-documentation-author:
+      - maker
+      sfl-boundary-evidence-auditor:
+      - advisor
+      sfl-boundary-evidence-broker:
+      - retriever
+      sfl-boundary-mechanism-tracer:
+      - advisor
+      sfl-boundary-modality-calibrator:
+      - advisor
+      sfl-boundary-relational-editor:
+      - advisor
+      sfl-boundary-satirical-reframer:
+      - advisor
+      sfl-boundary-coordinator:
+      - coordinator
+    isolation:
+      state: full
+      credentials: separate
+    handoffs:
+    - action: accept_current_revision
+      required_roles:
+      - maker
+      - checker
+      - coordinator
+      approval_required: true
+    enforcement: strict

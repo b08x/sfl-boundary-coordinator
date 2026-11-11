@@ -1,1 +1,5 @@
 .gitagent/
+.venv/
+__pycache__/
+*.pyc
+exports/
